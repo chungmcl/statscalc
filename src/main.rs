@@ -1,5 +1,3 @@
-#![allow(non_snake_case)] // hehe
-#![allow(unused_parens)]
 use std::io;
 use std::io::Write;
 
@@ -14,8 +12,8 @@ fn main() {
         match io::stdin().read_line(&mut input) {
             Ok(_) => {
                 input.pop(); // remove newline char
-                let splitStringData: Vec<&str> = input.split(";").collect();
-                for string in splitStringData {
+                let split_string_data: Vec<&str> = input.split(";").collect();
+                for string in split_string_data {
                     data.push(string.parse::<f32>().unwrap());
                     data.sort_by(|a, b| a.partial_cmp(b).unwrap());
                 }
@@ -30,57 +28,62 @@ fn main() {
         }
         println!();
     
-        let centralTendencies: (f32, f32, f32) = centralTendency(&data);
-        let measuresOfVariation: (f32, f32) = measuresOfVariation(&data);
-        println!("Population StdDev: {}\nSample StdDev: {}", measuresOfVariation.0, measuresOfVariation.1);
-        println!("Mean: {}\nMedian: {}\nMode: {}", centralTendencies.0, centralTendencies.1, centralTendencies.2);
+        let central_tendencies: (f32, f32, f32) = central_tendency(&data);
+        let measures_of_variation: (f32, f32) = measures_of_variation(&data);
+        println!("Population StdDev: {}\nSample StdDev: {}", measures_of_variation.0, measures_of_variation.1);
+        println!("Mean: {}\nMedian: {}\nMode: {}", central_tendencies.0, central_tendencies.1, central_tendencies.2);
         pause();
     }
 }
 
+fn measures_of_position(data: &Vec<f32>, fractiles: i32) {
+    
+}
+
 // Returns (populationStandardDeviation, sampleStandardDeviation)
-fn measuresOfVariation(data: &Vec<f32>) -> (f32, f32) {
-    let centralTendency = centralTendency(&data);
-    let mean: f32 = centralTendency.0;
-    let mut sumOfSquares: f32 = 0.0;
+fn measures_of_variation(data: &Vec<f32>) -> (f32, f32) {
+    let central_tendency = central_tendency(&data);
+    let mean: f32 = central_tendency.0;
+    let mut sum_of_squares: f32 = 0.0;
     for i in data {
-        sumOfSquares += ((i - mean) * (i - mean));
+        sum_of_squares += (i - mean) * (i - mean);
     }
-    let populationStdDev: f32 = (sumOfSquares / data.len() as f32).sqrt();
-    let sampleStdDev: f32 = (sumOfSquares / (data.len() - 1) as f32).sqrt();
-    return (populationStdDev, sampleStdDev);
+    let population_stdev: f32 = (sum_of_squares / data.len() as f32).sqrt();
+    let sample_stdev: f32 = (sum_of_squares / (data.len() - 1) as f32).sqrt();
+
+    return (population_stdev, sample_stdev);
 }
 
 // Returns (mean, median, mode). If mode is uncalculatable, mode = NaNf32
-fn centralTendency(data: &Vec<f32>) -> (f32, f32, f32) {
-    let dataLen: usize = data.len();
+fn central_tendency(data: &Vec<f32>) -> (f32, f32, f32) {
+    let data_len: usize = data.len();
     let mut sum: f32 = 0.0;
     for i in data {
         sum += i;
     }
-    let mean: f32 = sum / dataLen as f32;
+    let mean: f32 = sum / data_len as f32;
 
     let mut median: f32 = 0.0;
-    if dataLen > 0 {
-        if dataLen % 2 != 0 {
-            median = data[(dataLen / 2)];
+    if data_len > 0 {
+        if data_len % 2 != 0 {
+            median = data[(data_len / 2)];
         }
         else {
-            median = (data[(dataLen / 2)] + data[(dataLen / 2) - 1]) / 2.0;
+            median = (data[(data_len / 2)] + data[(data_len / 2) - 1]) / 2.0;
         }
     }
 
-    let frequencies: Vec<(f32, i32)> = getFrequencies(data);
-    let lastFreq: (f32, i32) = frequencies[frequencies.len() - 1];
+    let frequencies: Vec<(f32, i32)> = get_frequencies(data);
+    let last_freq: (f32, i32) = frequencies[frequencies.len() - 1];
     let mode: f32;
-    if lastFreq.1 > 1 { mode = lastFreq.0; }
+    if last_freq.1 > 1 { mode = last_freq.0; }
     else { mode = (-1.0f32).sqrt(); } // NaN it to represent no mode
 
     return (mean, median, mode);
 }
 
 // Returns (dataPoint, frequency)
-fn getFrequencies(data: &Vec<f32>) -> Vec<(f32, i32)> {
+fn get_frequencies(data: &Vec<f32>) -> Vec<(f32, i32)> {
     if data.len() < 1 { return Vec::new() }
 
     let mut frequencies: Vec<(f32, i32)> = Vec::new();
