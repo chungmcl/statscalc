@@ -33,8 +33,6 @@ pub fn median(sorted_data: &[f32]) -> f32 {
 pub fn mode(sorted_data: &[f32]) -> f32 {
     let frequencies: Vec<(f32, i32)> = general_funcs::get_frequencies(&sorted_data);
     let last_freq: (f32, i32) = frequencies[frequencies.len() - 1];
-    let mode: f32;
-    if last_freq.1 > 1 { mode = last_freq.0; }
-    else { mode = (-1.0f32).sqrt(); } // NaN it to represent no mode
+    let mode: f32 = if last_freq.1 > 1 { last_freq.0 } else { (-1.0f32).sqrt() }; // NaN it to represent no mode
     mode
 }
