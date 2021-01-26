@@ -1,5 +1,3 @@
-use std::io;
-
 // Returns Vec<(dataPoint, frequency)>
 pub fn get_frequencies(sorted_data: &[f32]) -> Vec<(f32, i32)> {
     if sorted_data.len() < 1 { return Vec::new() }
@@ -21,9 +19,12 @@ pub fn get_frequencies(sorted_data: &[f32]) -> Vec<(f32, i32)> {
     frequencies
 }
 
-pub fn pause() {
-    // pause
-    io::stdin().read_line(&mut String::new()).unwrap();
-    // clear console
-    print!("\x1B[2J\x1B[1;1H");
+pub fn factorial(n: f64) -> f64 {
+    let mut number: f64 = n;
+    let mut result: f64 = 1.0;
+    while number > 0.0 {
+        result *= number;
+        number = number - 1.0;
+    }
+    result
 }
