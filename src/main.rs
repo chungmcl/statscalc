@@ -54,7 +54,7 @@ fn data_set_info() {
         Ok(_) => {
             input.pop(); // remove newline char
             input.retain(|c| !c.is_whitespace()); // remove whitespace 
-            let split_string_data: Vec<&str> = input.split(|c| c == ',' || c == ';' || c == ' ').collect();
+            let split_string_data: Vec<&str> = input.split(|c| c == ',' || c == ';').collect();
             for string in split_string_data {
                 data.push(string.parse::<f32>().unwrap());
                 data.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -84,14 +84,14 @@ fn arrangements_info() {
     println!("ARRANGEMENTS");
     println!("Calculates permutations and combinations for a given n and r");
     println!("(Enter only n for # of different permutations of n distinct objects)");
-    print!("Enter n and r as \"n;r\" OR \"n,r\" OR \"n r\": ");
+    print!("Enter n and r as \"n;r\" OR \"n,r\": ");
     io::stdout().flush().unwrap(); // print requires you to flush the buffer yourself, but not println
 
     match io::stdin().read_line(&mut input) {
         Ok(_) => {
             input.pop(); // remove newline char
             input.retain(|c| !c.is_whitespace()); // remove whitespace
-            let split_string_data: Vec<&str> = input.split(|c| c == ',' || c == ';' || c == ' ').collect();
+            let split_string_data: Vec<&str> = input.split(|c| c == ',' || c == ';').collect();
             if split_string_data.len() == 2 {
                 let n: f64 = split_string_data[0].parse::<f64>().unwrap();
                 let r: f64 = split_string_data[1].parse::<f64>().unwrap();
