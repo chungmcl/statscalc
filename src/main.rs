@@ -9,6 +9,7 @@ mod measures_of_position;
 fn main() {
     loop {
         let mut input: String = String::new();
+	print!("statscalc");
         print!("Enter data delimited by semicolon: ");
         io::stdout().flush().unwrap(); // print requires you to flush the buffer yourself, but not println
     
