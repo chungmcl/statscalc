@@ -7,7 +7,7 @@ pub fn get_all(data: &[f32]) -> (f32, f32) {
 }
 
 pub fn stdev(data: &[f32], is_population: bool) -> f32 {
-    let set_count: f32 = data.len() as f32 + if is_population { -1.0 } else { 0.0 };
+    let set_count: f32 = data.len() as f32 + if is_population { 0.0 } else { -1.0 };
     (sum_of_squares(&data) / set_count).sqrt()
 }
 
