@@ -163,7 +163,6 @@ fn normal_distribution_info() {
     println!("1. Find Y of Z value");
     println!("2. Find area under curve");
     println!("3. Find area under curve (standard)");
-    io::stdout().flush().unwrap(); // print requires you to flush the buffer yourself, but not println
 
     let selection: &str = &get_input("Enter Selection")[..];
     clear();
@@ -187,7 +186,6 @@ fn normal_distribution_info() {
         },
         "3" => {
             println!("Enter -- a, b -- in this order separated by , or ;");
-            println!("Enter -- stdev, mean, a, b -- in this order separated by , or ;");
             let input: Vec<String> = get_split_input("Input");
             let mut input_float: Vec<f32> = Vec::new();
             for i in input {
