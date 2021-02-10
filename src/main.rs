@@ -200,7 +200,7 @@ fn normal_distribution_info() {
             else {
                 z = normal_distributions::normal_distribution_area_inverse(input[0], 1.0, 0.0);
             }
-            println!("Closest approximation of Z ≈ {}", z);
+            println!("Closest approximation of Z ≈ {} ≈ {:04.4}", z, z);
         }
         _ => { println!("Invalid selection. Please try again."); }
     }
