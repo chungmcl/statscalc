@@ -119,10 +119,10 @@ fn binomial_probability_info() {
         println!("0. Exit");
         println!("1. Binomial Probability Formula");
         println!("2. Binomial Probability Distribution Generator");
-        let input: &str = &get_input("Enter selection")[..];
+        let selection: &str = &get_input("Enter selection")[..];
 
         clear();
-        match input {
+        match selection {
             "0" => { continue_execution = false },
             "1" => { // Binomial Probability Formula
                 println!("Enter # of trials, # of successes, and probability of success\nin this order separated by , or ;");
@@ -162,47 +162,65 @@ fn normal_distribution_info() {
     println!("0. Exit");
     println!("1. Find Y of Z value");
     println!("2. Find area under curve");
-    println!("3. Find area under curve (standard)");
-
+    println!("3. Find the Z of an area");
     let selection: &str = &get_input("Enter Selection")[..];
-    clear();
 
+    clear();
     match selection {
         "0" =>  { /* do nothing and exit */ },
         "1" => { // Find Y of Z value
 
         },
-        "2" => { // Find area under curve
-            println!("Enter -- stdev, mean, a, b -- in this order separated by , or ;");
-            let input: Vec<String> = get_split_input("Input");
-            let mut input_float: Vec<f32> = Vec::new();
-            for i in input {
-                input_float.push(i.parse::<f32>().unwrap());
+        "2" => {
+            println!("Approximate integral of a normal distribution");
+            println!("Enter -- a, b, stdev, mean -- in this order separated by , or ;");
+            println!("For a standard normal distribution, enter a and b only");
+            println!("Infinity can be represented by -inf and inf");
+            let input: Vec<f32> = get_split_f32_input("Input");
+            let area: f32;
+            if input.len() > 2 {
+                area = normal_distributions::normal_distribution_integral(input[0], input[1], input[2], input[3]);
             }
-            let area: f32 = 
-                normal_distributions::std_normal_distribution_integral(input_float[0], input_float[1], input_float[2], input_float[3]);
+            else {
+                area = normal_distributions::normal_distribution_integral(input[0], input[1], 1.0, 0.0);
+            }
             let p: f32 = area * 100.0;
-            println!("The area is: {} = {}%", area, p);
-        },
+            // :04 -> total of four digits -- .2 -> two decimal places
+            println!("The area is: {} ≈ {:04.2}%", area, p);
+        }
         "3" => {
-            println!("Enter -- a, b -- in this order separated by , or ;");
-            let input: Vec<String> = get_split_input("Input");
-            let mut input_float: Vec<f32> = Vec::new();
-            for i in input {
-                input_float.push(i.parse::<f32>().unwrap());
+            println!("Approximate Z value of a given area");
+            println!("Enter -- area, stdev, mean -- in this order separated by , or ;");
+            println!("For a standard normal distribution, enter area only");
+            let input: Vec<f32> = get_split_f32_input("Input");
+            let z: f32;
+            if input.len() > 1 {
+                z = normal_distributions::normal_distribution_area_inverse(input[0], input[1], input[2]);
             }
-            let area: f32 = 
-                normal_distributions::std_normal_distribution_integral(1.0, 0.0, input_float[0], input_float[1]);
-            let p: f32 = area * 100.0;
-            println!("The area is: {} = {}%", area, p);
-
+            else {
+                z = normal_distributions::normal_distribution_area_inverse(input[0], 1.0, 0.0);
+            }
+            println!("Closest approximation of Z ≈ {}", z);
         }
         _ => { println!("Invalid selection. Please try again."); }
     }
 }
 
+fn get_split_f32_input(message: &str) -> Vec<f32> {
+    let mut result: Vec<f32> = Vec::new();
+    let strings: Vec<String> = get_split_input(message);
+    for i in strings {
+        result.push(i.parse::<f32>().unwrap());
+    }
+    result
+}
+
 fn get_split_input(message: &str) -> Vec<String> {
-    get_input(message).split(|c| c == ',' || c == ';').map(String::from).collect()
+    let mut result: Vec<String> = get_input(message).split(|c| c == ',' || c == ';').map(String::from).collect();
+    for i in 0..result.len() {
+        result[i] = String::from(result[i].trim());
+    }
+    result
 }
 
 fn get_input(message: &str) -> String {
@@ -215,9 +233,7 @@ fn get_input(message: &str) -> String {
 }
 
 fn pause() {
-    // pause
     io::stdin().read_line(&mut String::new()).unwrap();
-    // clear console
     clear();
 }
 
